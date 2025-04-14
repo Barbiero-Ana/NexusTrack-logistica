@@ -1,0 +1,125 @@
+/* 
+===========================================
+ESTILOS CSS PERSONALIZADOS - DASHBOARD
+===========================================
+
+Este arquivo contém estilos que complementam o Tailwind CSS
+para o dashboard do NexusTrack.
+*/
+
+/* Importação da fonte Inter do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Transição suave para todos os elementos */
+.custom-transition {
+    transition: all 0.3s ease;
+}
+
+/* 
+GRADIENTES PERSONALIZADOS
+Definição do gradiente da área lateral e botões
+Obs: Diferentes variações para modo claro e escuro
+*/
+.gradient-bg {
+    background: linear-gradient(135deg, #5D5CDE 0%, #7E7DE6 100%);
+}
+
+.dark .gradient-bg {
+    background: linear-gradient(135deg, #4A49B8 0%, #5D5CDE 100%);
+}
+
+/* 
+ANIMAÇÕES DE PULSO
+Efeito suave de pulso para o logotipo
+*/
+@keyframes pulse-light {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(93, 92, 222, 0); }
+}
+
+@keyframes pulse-dark {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(126, 125, 230, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(126, 125, 230, 0); }
+}
+
+.animate-pulse-light {
+    animation: pulse-light 2s infinite;
+}
+
+.dark .animate-pulse-light {
+    animation: pulse-dark 2s infinite;
+}
+
+/* 
+TRANSIÇÕES PARA O MENU LATERAL
+*/
+#sidebar {
+    transform: translateX(0);
+}
+
+#sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+/* 
+ESTILIZAÇÃO DOS CARDS DE ENVIO
+Transições suaves para expansão/contração
+*/
+.shipment-header {
+    transition: background-color 0.2s ease;
+}
+
+.shipment-header:hover {
+    background-color: rgba(93, 92, 222, 0.05);
+}
+
+.dark .shipment-header:hover {
+    background-color: rgba(93, 92, 222, 0.1);
+}
+
+.shipment-chevron {
+    transition: transform 0.3s ease;
+}
+
+.shipment-card.expanded .shipment-chevron {
+    transform: rotate(180deg);
+}
+
+.shipment-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+.shipment-card.expanded .shipment-details {
+    max-height: 2000px;
+    display: block;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        z-index: 50;
+        height: 100vh;
+    }
+    
+    #sidebar.hidden {
+        transform: translateX(-100%);
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+    }
+    
+    .overlay.active {
+        display: block;
+    }
+}

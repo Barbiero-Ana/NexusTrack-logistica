@@ -1,0 +1,105 @@
+/* 
+===========================================
+ESTILOS CSS PERSONALIZADOS
+===========================================
+
+Aqui definimos estilos que não são facilmente alcançáveis 
+apenas com classes do Tailwind, como:
+- Animações personalizadas
+- Efeito de flip do card de login/cadastro
+- Gradientes especiais
+- Efeito de pulso no logo
+
+Esses estilos podem ser reutilizados em outras telas do sistema.
+*/
+
+/* Importação da fonte Inter do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Transição suave para todos os elementos que usam esta classe */
+.custom-transition {
+    transition: all 0.3s ease;
+}
+
+/* 
+EFEITO DE FLIP DO FORMULÁRIO
+Estas classes controlam o efeito 3D de virar o card
+entre formulário de login e cadastro
+*/
+.perspective {
+    perspective: 1000px; /* Ajuste da perspectiva para melhor efeito 3D */
+    min-height: 620px; /* Altura mínima para acomodar os formulários */
+}
+
+.form-container {
+    transform-style: preserve-3d; /* Preserva o estilo 3D para elementos filhos */
+    transform: rotateY(0deg);
+    transition: transform 0.6s ease;
+    position: relative;
+    min-height: 600px; /* Altura mínima para garantir que todo o conteúdo seja visível */
+}
+
+.form-container.flipped {
+    transform: rotateY(180deg);
+}
+
+.form-side {
+    backface-visibility: hidden;
+    transition: transform 0.6s ease;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.form-front {
+    z-index: 2; /* Garante que o formulário de login fique visível inicialmente */
+    transform: rotateY(0deg);
+}
+
+.form-back {
+    transform: rotateY(180deg);
+}
+
+/* 
+GRADIENTES PERSONALIZADOS
+Definição do gradiente da área lateral e botões
+Obs: Diferentes variações para modo claro e escuro
+*/
+.gradient-bg {
+    background: linear-gradient(135deg, #5D5CDE 0%, #7E7DE6 100%);
+}
+
+.dark .gradient-bg {
+    background: linear-gradient(135deg, #4A49B8 0%, #5D5CDE 100%);
+}
+
+/* 
+ANIMAÇÕES DE PULSO
+Efeito suave de pulso para o logotipo
+Diferentes variações para modo claro e escuro
+*/
+@keyframes pulse-light {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(93, 92, 222, 0); }
+}
+
+@keyframes pulse-dark {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(126, 125, 230, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(126, 125, 230, 0); }
+}
+
+.animate-pulse-light {
+    animation: pulse-light 2s infinite;
+}
+
+.dark .animate-pulse-light {
+    animation: pulse-dark 2s infinite;
+}
+
+/* Ajuste para melhorar a responsividade dos formulários */
+@media (max-width: 640px) {
+    .perspective, .form-container {
+        min-height: 680px; /* Maior altura para dispositivos móveis */
+    }
+}
