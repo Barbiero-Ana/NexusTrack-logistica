@@ -120,7 +120,7 @@ class NexusSidebar {
     handleLogout() {
         // Em uma implementação real, você faria uma chamada para encerrar a sessão
         // Por enquanto, apenas redirecionamos para a página de login
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     }
 }
 
