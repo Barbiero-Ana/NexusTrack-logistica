@@ -19,7 +19,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 // Função para carregar o sidebar
 function loadSidebar() {
     // Carregamos o HTML do sidebar via fetch e o inserimos na página
-    fetch('components/sidebar/sidebar.html')
+    fetch('/components/sidebar/sidebar.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erro ao carregar o sidebar: ' + response.statusText);
