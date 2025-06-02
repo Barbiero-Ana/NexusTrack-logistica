@@ -1,31 +1,47 @@
-/* 
+/*
 ===========================================
-ESTILOS CSS PERSONALIZADOS
+ESTILOS CSS PERSONALIZADOS - NEXUSTRACK
 ===========================================
 
-Aqui definimos estilos que não são facilmente alcançáveis 
-apenas com classes do Tailwind, como:
-- Animações personalizadas
-- Efeito de flip do card de login/cadastro
-- Gradientes especiais
-- Efeito de pulso no logo
+Arquivo: login.css
+Descrição: Estilos personalizados para a tela de login/cadastro
+Autor: Equipe NexusTrack
+Data: 2025
 
-Esses estilos podem ser reutilizados em outras telas do sistema.
+Índice:
+1. Importações e fontes
+2. Utilitários globais
+3. Efeito de flip do formulário
+4. Gradientes personalizados
+5. Animações
+6. Responsividade
 */
+
+/* ===========================================
+   1. IMPORTAÇÕES E FONTES
+   =========================================== */
 
 /* Importação da fonte Inter do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===========================================
+   2. UTILITÁRIOS GLOBAIS
+   =========================================== */
 
 /* Transição suave para todos os elementos que usam esta classe */
 .custom-transition {
     transition: all 0.3s ease;
 }
 
-/* 
-EFEITO DE FLIP DO FORMULÁRIO
+/* ===========================================
+   3. EFEITO DE FLIP DO FORMULÁRIO
+   =========================================== */
+
+/*
 Estas classes controlam o efeito 3D de virar o card
 entre formulário de login e cadastro
 */
+
 .perspective {
     perspective: 1000px; /* Ajuste da perspectiva para melhor efeito 3D */
     min-height: 620px; /* Altura mínima para acomodar os formulários */
@@ -61,11 +77,15 @@ entre formulário de login e cadastro
     transform: rotateY(180deg);
 }
 
-/* 
-GRADIENTES PERSONALIZADOS
+/* ===========================================
+   4. GRADIENTES PERSONALIZADOS
+   =========================================== */
+
+/*
 Definição do gradiente da área lateral e botões
-Obs: Diferentes variações para modo claro e escuro
+Diferentes variações para modo claro e escuro
 */
+
 .gradient-bg {
     background: linear-gradient(135deg, #5D5CDE 0%, #7E7DE6 100%);
 }
@@ -74,19 +94,31 @@ Obs: Diferentes variações para modo claro e escuro
     background: linear-gradient(135deg, #4A49B8 0%, #5D5CDE 100%);
 }
 
-/* 
-ANIMAÇÕES DE PULSO
+/* ===========================================
+   5. ANIMAÇÕES
+   =========================================== */
+
+/*
 Efeito suave de pulso para o logotipo
 Diferentes variações para modo claro e escuro
 */
+
 @keyframes pulse-light {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(93, 92, 222, 0); }
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); 
+    }
+    50% { 
+        box-shadow: 0 0 0 8px rgba(93, 92, 222, 0); 
+    }
 }
 
 @keyframes pulse-dark {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(126, 125, 230, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(126, 125, 230, 0); }
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(126, 125, 230, 0.4); 
+    }
+    50% { 
+        box-shadow: 0 0 0 8px rgba(126, 125, 230, 0); 
+    }
 }
 
 .animate-pulse-light {
@@ -97,9 +129,58 @@ Diferentes variações para modo claro e escuro
     animation: pulse-dark 2s infinite;
 }
 
-/* Ajuste para melhorar a responsividade dos formulários */
+/* ===========================================
+   6. RESPONSIVIDADE
+   =========================================== */
+
+/* Ajustes para dispositivos móveis */
 @media (max-width: 640px) {
-    .perspective, .form-container {
+    .perspective, 
+    .form-container {
         min-height: 680px; /* Maior altura para dispositivos móveis */
     }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .perspective, 
+    .form-container {
+        min-height: 640px;
+    }
+}
+
+/* ===========================================
+   7. ESTADOS DE FOCO E HOVER
+   =========================================== */
+
+/* Melhoria dos estados de foco para acessibilidade */
+.form-side input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.1);
+}
+
+.form-side button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.2);
+}
+
+/* Estados hover para melhor feedback visual */
+.form-side input:hover {
+    border-color: #7E7DE6;
+}
+
+/* ===========================================
+   8. MODO ESCURO - AJUSTES ESPECÍFICOS
+   =========================================== */
+
+.dark .form-side input:focus {
+    box-shadow: 0 0 0 3px rgba(126, 125, 230, 0.1);
+}
+
+.dark .form-side button:focus {
+    box-shadow: 0 0 0 3px rgba(126, 125, 230, 0.2);
+}
+
+.dark .form-side input:hover {
+    border-color: #7E7DE6;
 }
