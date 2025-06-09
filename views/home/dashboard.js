@@ -23,6 +23,354 @@ let displayedShipments = [];
 let isAdmin = false;
 
 // ===========================================
+// DADOS DEMO PARA DEMONSTRAÇÃO
+// ===========================================
+
+/**
+ * Gera próximo ID sequencial
+ */
+function generateNextId() {
+    const users = JSON.parse(localStorage.getItem('nexustrack_users') || '[]');
+    const maxId = users.length > 0 ? Math.max(...users.map(u => parseInt(u.id))) : 0;
+    return maxId + 1;
+}
+
+/**
+ * Usuários demo para demonstração
+ */
+function createDemoUsers() {
+    return [
+        {
+            id: 1,
+            firstName: 'Admin',
+            lastName: 'Sistema',
+            email: 'admin@nexustrack.com',
+            password: 'admin123',
+            role: 'admin',
+            createdAt: new Date('2024-01-01').toISOString(),
+            lastLogin: new Date().toISOString(),
+            isActive: true
+        },
+        {
+            id: 2,
+            firstName: 'Usuário',
+            lastName: 'Teste',
+            email: 'teste@email.com',
+            password: 'senha123',
+            role: 'user',
+            createdAt: new Date('2024-06-15').toISOString(),
+            lastLogin: new Date('2024-12-20').toISOString(),
+            isActive: true
+        },
+        {
+            id: 3,
+            firstName: 'Ana',
+            lastName: 'Silva',
+            email: 'ana.silva@demo.com',
+            password: '123456',
+            role: 'user',
+            createdAt: new Date('2024-03-10').toISOString(),
+            lastLogin: new Date('2024-12-18').toISOString(),
+            isActive: true
+        },
+        {
+            id: 4,
+            firstName: 'Carlos',
+            lastName: 'Santos',
+            email: 'carlos.santos@demo.com',
+            password: 'demo123',
+            role: 'manager',
+            createdAt: new Date('2024-02-28').toISOString(),
+            lastLogin: new Date('2024-12-15').toISOString(),
+            isActive: true
+        },
+        {
+            id: 5,
+            firstName: 'Maria',
+            lastName: 'Oliveira',
+            email: 'maria.oliveira@demo.com',
+            password: 'maria2025',
+            role: 'user',
+            createdAt: new Date('2024-08-22').toISOString(),
+            lastLogin: new Date('2024-12-10').toISOString(),
+            isActive: false
+        },
+        {
+            id: 6,
+            firstName: 'João',
+            lastName: 'Pereira',
+            email: 'joao.pereira@demo.com',
+            password: 'joao456',
+            role: 'user',
+            createdAt: new Date('2024-11-05').toISOString(),
+            lastLogin: new Date('2024-12-22').toISOString(),
+            isActive: true
+        },
+        {
+            id: 7,
+            firstName: 'Victtor',
+            lastName: 'Dezan',
+            email: 'victtordezan@gmail.com',
+            password: '19130506',
+            role: 'user',
+            createdAt: new Date('2024-11-05').toISOString(),
+            lastLogin: new Date('2024-12-22').toISOString(),
+            isActive: true
+        }
+    ];
+}
+
+/**
+ * Dados fake de envios para demonstração
+ */
+const FAKE_SHIPMENTS = [
+    {
+        id: 1,
+        trackingCode: 'NT001234567BR',
+        recipientName: 'Carlos Eduardo Santos',
+        corporateRecipient: 'TechCorp Solutions Ltda',
+        zipCode: '01310-100',
+        purchaseDate: '2024-01-15',
+        carrier: 'Correios',
+        cnpj: '34.028.316/0001-59',
+        email: 'contato@correios.com.br',
+        phone1: '(11) 3003-0100',
+        phone2: '(11) 0800-725-7282',
+        notes: 'Entrega apenas em horário comercial. Produto frágil - manusear com cuidado.',
+        status: 'Em Trânsito',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-15T08:30:00.000Z',
+        updatedAt: '2024-01-16T14:22:00.000Z',
+        file: {
+            name: 'nota-fiscal-001.pdf',
+            size: 245760
+        }
+    },
+    {
+        id: 2,
+        trackingCode: 'NT002345678BR',
+        recipientName: 'Fernanda Lima',
+        corporateRecipient: null,
+        zipCode: '04567-890',
+        purchaseDate: '2024-01-14',
+        carrier: 'Jadlog',
+        cnpj: '04.884.082/0001-35',
+        email: 'atendimento@jadlog.com.br',
+        phone1: '(11) 4003-4400',
+        phone2: null,
+        notes: null,
+        status: 'Entregue',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-14T10:15:00.000Z',
+        updatedAt: '2024-01-17T16:45:00.000Z',
+        file: null
+    },
+    {
+        id: 3,
+        trackingCode: 'NT003456789BR',
+        recipientName: 'Roberto Silva Machado',
+        corporateRecipient: 'Indústrias ABC S.A.',
+        zipCode: '20040-020',
+        purchaseDate: '2024-01-16',
+        carrier: 'Total Express',
+        cnpj: '11.222.333/0001-44',
+        email: 'sac@totalexpress.com.br',
+        phone1: '(21) 3004-5000',
+        phone2: '(21) 99999-8888',
+        notes: 'Entrega agendada para manhã. Solicitar assinatura do responsável.',
+        status: 'Em Processamento',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-16T09:45:00.000Z',
+        updatedAt: '2024-01-16T15:30:00.000Z',
+        file: {
+            name: 'comprovante-compra.jpg',
+            size: 1024000
+        }
+    },
+    {
+        id: 4,
+        trackingCode: 'NT004567890BR',
+        recipientName: 'Juliana Pereira',
+        corporateRecipient: null,
+        zipCode: '30112-000',
+        purchaseDate: '2024-01-13',
+        carrier: 'Mercado Envios',
+        cnpj: '10.573.521/0001-91',
+        email: 'envios@mercadolivre.com.br',
+        phone1: '(31) 3003-1234',
+        phone2: null,
+        notes: 'Produto eletrônico. Verificar funcionamento na entrega.',
+        status: 'Cancelado',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-13T14:20:00.000Z',
+        updatedAt: '2024-01-15T11:10:00.000Z',
+        file: null
+    },
+    {
+        id: 5,
+        trackingCode: 'NT005678901BR',
+        recipientName: 'Lucas Andrade',
+        corporateRecipient: 'StartUp Inovação Ltda',
+        zipCode: '80010-130',
+        purchaseDate: '2024-01-17',
+        carrier: 'Azul Cargo',
+        cnpj: '09.296.295/0001-60',
+        email: 'cargo@voeazul.com.br',
+        phone1: '(41) 3320-2000',
+        phone2: '(41) 0800-580-3000',
+        notes: 'Entrega expressa solicitada. Prioridade alta.',
+        status: 'Cadastrado',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-17T11:00:00.000Z',
+        updatedAt: '2024-01-17T11:00:00.000Z',
+        file: {
+            name: 'especificacoes-produto.pdf',
+            size: 512000
+        }
+    },
+    {
+        id: 6,
+        trackingCode: 'NT006789012BR',
+        recipientName: 'Amanda Costa Silva',
+        corporateRecipient: null,
+        zipCode: '60175-047',
+        purchaseDate: '2024-01-12',
+        carrier: 'Sequoia Log',
+        cnpj: '15.436.940/0001-03',
+        email: 'contato@sequoialog.com.br',
+        phone1: '(85) 3033-4000',
+        phone2: null,
+        notes: null,
+        status: 'Em Trânsito',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-12T16:30:00.000Z',
+        updatedAt: '2024-01-16T13:15:00.000Z',
+        file: null
+    },
+    {
+        id: 7,
+        trackingCode: 'NT007890123BR',
+        recipientName: 'Diego Ferreira Lopes',
+        corporateRecipient: 'Comércio Digital ME',
+        zipCode: '90010-150',
+        purchaseDate: '2024-01-18',
+        carrier: 'Braspress',
+        cnpj: '48.740.351/0001-07',
+        email: 'relacionamento@braspress.com.br',
+        phone1: '(51) 3358-4000',
+        phone2: '(51) 0800-601-1112',
+        notes: 'Mercadoria de alto valor. Exige documento com foto na entrega.',
+        status: 'Em Processamento',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-18T08:15:00.000Z',
+        updatedAt: '2024-01-18T12:45:00.000Z',
+        file: {
+            name: 'declaracao-valor.pdf',
+            size: 186400
+        }
+    },
+    {
+        id: 8,
+        trackingCode: 'NT008901234BR',
+        recipientName: 'Camila Rodrigues',
+        corporateRecipient: null,
+        zipCode: '70040-010',
+        purchaseDate: '2024-01-11',
+        carrier: 'Loggi',
+        cnpj: '13.957.799/0001-56',
+        email: 'suporte@loggi.com',
+        phone1: '(61) 3033-7000',
+        phone2: null,
+        notes: 'Entrega em condomínio. Autorizar na portaria.',
+        status: 'Entregue',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-11T13:45:00.000Z',
+        updatedAt: '2024-01-14T17:30:00.000Z',
+        file: null
+    },
+    {
+        id: 9,
+        trackingCode: 'NT009012345BR',
+        recipientName: 'Rafael Santos Oliveira',
+        corporateRecipient: 'TechHub Coworking',
+        zipCode: '22071-900',
+        purchaseDate: '2024-01-19',
+        carrier: 'Rapidão Cometa',
+        cnpj: '05.570.714/0001-59',
+        email: 'atendimento@rapidaocometa.com.br',
+        phone1: '(21) 2078-8000',
+        phone2: '(21) 0800-021-2121',
+        notes: 'Equipamento de informática. Manter na vertical durante transporte.',
+        status: 'Cadastrado',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-19T07:30:00.000Z',
+        updatedAt: '2024-01-19T07:30:00.000Z',
+        file: {
+            name: 'manual-equipamento.pdf',
+            size: 2048000
+        }
+    },
+    {
+        id: 10,
+        trackingCode: 'NT010123456BR',
+        recipientName: 'Patricia Almeida',
+        corporateRecipient: null,
+        zipCode: '14801-140',
+        purchaseDate: '2024-01-10',
+        carrier: 'Via Brasil',
+        cnpj: '07.526.557/0001-00',
+        email: 'relacionamento@viabrasil.com.br',
+        phone1: '(16) 3602-2000',
+        phone2: null,
+        notes: 'Cliente preferencial. Priorizar entrega.',
+        status: 'Em Trânsito',
+        userId: 3,
+        userInfo: { name: 'Ana Silva' },
+        createdAt: '2024-01-10T15:20:00.000Z',
+        updatedAt: '2024-01-17T09:10:00.000Z',
+        file: null
+    }
+];
+
+/**
+ * Inicializa dados demo se não existirem dados reais
+ */
+function initializeFakeData() {
+    // Verificar se já existem dados no localStorage
+    const existingShipments = localStorage.getItem('nexustrack_shipments');
+    const existingUser = localStorage.getItem('loggedInUser');
+    
+    // Se não há envios, criar dados fake
+    if (!existingShipments) {
+        localStorage.setItem('nexustrack_shipments', JSON.stringify(FAKE_SHIPMENTS));
+        console.log('📦 Dados fake de envios carregados!');
+    }
+    
+    // Se não há usuário logado, definir usuário admin demo
+    if (!existingUser) {
+        const demoUsers = createDemoUsers();
+        localStorage.setItem('loggedInUser', JSON.stringify(demoUsers[0])); // Admin Sistema
+        console.log('👤 Usuário admin demo logado!');
+    }
+    
+    // Salvar lista de usuários para referência
+    const existingUsers = localStorage.getItem('nexustrack_users');
+    if (!existingUsers) {
+        localStorage.setItem('nexustrack_users', JSON.stringify(createDemoUsers()));
+        console.log('👥 Usuários demo salvos!');
+    }
+}
+
+// ===========================================
 // 2. GERENCIAMENTO DE USUÁRIO LOGADO
 // ===========================================
 
@@ -842,6 +1190,9 @@ function initThemeDetection() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 NexusTrack Dashboard inicializando...');
     
+    // Inicializar dados demo primeiro
+    initializeFakeData();
+    
     // Verificar autenticação
     checkAuthenticatedUser();
     
@@ -870,7 +1221,25 @@ window.dashboardDebug = {
         document.getElementById('statusFilter').value = '';
         document.getElementById('timeFilter').value = '';
         applyFilters();
-    }
+    },
+    resetFakeData: () => {
+        localStorage.removeItem('nexustrack_shipments');
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('nexustrack_users');
+        initializeFakeData();
+        location.reload();
+    },
+    switchUser: (userId) => {
+        const users = createDemoUsers();
+        const user = users.find(u => u.id === userId);
+        if (user) {
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            location.reload();
+        } else {
+            console.log('Usuários disponíveis:', users.map(u => `${u.id} (${u.firstName} ${u.lastName} - ${u.role})`));
+        }
+    },
+    getUsers: () => createDemoUsers()
 };
 
 console.log(`
@@ -884,6 +1253,14 @@ console.log(`
 • dashboardDebug.isAdmin()
 • dashboardDebug.refreshData()
 • dashboardDebug.clearFilters()
+• dashboardDebug.resetFakeData()
+• dashboardDebug.switchUser(1) // Admin Sistema
+• dashboardDebug.switchUser(3) // Ana Silva
+• dashboardDebug.switchUser(7) // Victtor Dezan
+• dashboardDebug.getUsers() // Lista todos
+
+Usuários disponíveis:
+${createDemoUsers().map(u => `• ${u.id}: ${u.firstName} ${u.lastName} (${u.role}) - ${u.email}`).join('\n')}
 
 ========================================
 `);
