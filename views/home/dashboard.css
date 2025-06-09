@@ -1,0 +1,522 @@
+/* Importação da fonte Inter do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===========================================
+   ESTILOS PARA DASHBOARD
+   =========================================== */
+
+/* Transição suave para todos os elementos */
+.custom-transition {
+    transition: all 0.3s ease;
+}
+
+/* Gradientes personalizados */
+.gradient-bg {
+    background: linear-gradient(135deg, #5D5CDE 0%, #7E7DE6 100%);
+}
+
+.dark .gradient-bg {
+    background: linear-gradient(135deg, #4A49B8 0%, #5D5CDE 100%);
+}
+
+/* ===========================================
+   SIDEBAR STYLES
+   =========================================== */
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: white;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.dark .sidebar {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dark .sidebar-header {
+    border-color: #374151;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0 1rem;
+    margin: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: #6b7280;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.menu-item:hover {
+    background-color: #f3f4f6;
+    color: #5D5CDE;
+}
+
+.dark .menu-item:hover {
+    background-color: #374151;
+    color: #7E7DE6;
+}
+
+.menu-item.active {
+    background-color: #5D5CDE;
+    color: white;
+}
+
+.menu-item svg {
+    margin-right: 0.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #e5e7eb;
+    margin-top: auto;
+}
+
+.dark .sidebar-footer {
+    border-color: #374151;
+}
+
+/* Mobile sidebar */
+@media (max-width: 1024px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+    }
+}
+
+/* ===========================================
+   CARDS DE ENVIO
+   =========================================== */
+
+.shipment-card {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.dark .shipment-card {
+    background: #1f2937;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.shipment-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.dark .shipment-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.shipment-header {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem;
+}
+
+.dark .shipment-header {
+    border-color: #374151;
+}
+
+.shipment-header:hover {
+    background-color: rgba(93, 92, 222, 0.05);
+}
+
+.dark .shipment-header:hover {
+    background-color: rgba(93, 92, 222, 0.1);
+}
+
+.shipment-chevron {
+    transition: transform 0.3s ease;
+}
+
+.shipment-card.expanded .shipment-chevron {
+    transform: rotate(180deg);
+}
+
+.shipment-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+    padding: 0;
+}
+
+.shipment-card.expanded .shipment-details {
+    max-height: 2000px;
+    padding: 1rem;
+}
+
+/* ===========================================
+   STATUS BADGES
+   =========================================== */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-cadastrado {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.dark .status-cadastrado {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+}
+
+.status-processamento {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.dark .status-processamento {
+    background-color: #92400e;
+    color: #fbbf24;
+}
+
+.status-transito {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.dark .status-transito {
+    background-color: #1d4ed8;
+    color: #60a5fa;
+}
+
+.status-entregue {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.dark .status-entregue {
+    background-color: #15803d;
+    color: #86efac;
+}
+
+.status-cancelado {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+.dark .status-cancelado {
+    background-color: #991b1b;
+    color: #fca5a5;
+}
+
+/* ===========================================
+   TIMELINE DE PROGRESSO
+   =========================================== */
+
+.progress-timeline {
+    position: relative;
+}
+
+.progress-line {
+    position: absolute;
+    left: 1.25rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.dark .progress-line {
+    background: #374151;
+}
+
+.progress-line.active {
+    background: #5D5CDE;
+}
+
+.progress-step {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.progress-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border: 2px solid white;
+}
+
+.dark .progress-icon {
+    border-color: #1f2937;
+}
+
+.progress-icon.completed {
+    background: #5D5CDE;
+}
+
+.progress-icon.current {
+    background: #3b82f6;
+    animation: pulse 2s infinite;
+}
+
+.progress-icon.pending {
+    background: #e5e7eb;
+}
+
+.dark .progress-icon.pending {
+    background: #4b5563;
+}
+
+.progress-content {
+    margin-left: 1rem;
+}
+
+/* ===========================================
+   ALERTAS
+   =========================================== */
+
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.alert-success {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.dark .alert-success {
+    background-color: #052e16;
+    color: #86efac;
+    border-color: #166534;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.dark .alert-error {
+    background-color: #450a0a;
+    color: #fca5a5;
+    border-color: #dc2626;
+}
+
+.alert-warning {
+    background-color: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fed7aa;
+}
+
+.dark .alert-warning {
+    background-color: #451a03;
+    color: #fdba74;
+    border-color: #d97706;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.dark .alert-info {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+    border-color: #2563eb;
+}
+
+.alert svg {
+    margin-right: 0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* ===========================================
+   LOADING SPINNER
+   =========================================== */
+
+.loading-spinner {
+    border: 2px solid rgba(93, 92, 222, 0.2);
+    border-top: 2px solid #5D5CDE;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===========================================
+   ANIMAÇÕES
+   =========================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ===========================================
+   RESPONSIVIDADE
+   =========================================== */
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .shipment-card {
+        margin: 0.5rem 0;
+    }
+    
+    .grid-cols-2.md\\:grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .grid.grid-cols-1.md\\:grid-cols-2 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .flex.space-x-2 {
+        flex-direction: column;
+        space-x: 0;
+        gap: 0.5rem;
+    }
+}
+
+/* ===========================================
+   MODO ESCURO - AJUSTES ESPECÍFICOS
+   =========================================== */
+
+.dark body {
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+.dark .bg-white {
+    background-color: #1f2937;
+}
+
+.dark .border-gray-200 {
+    border-color: #374151;
+}
+
+.dark .text-gray-700 {
+    color: #d1d5db;
+}
+
+.dark .text-gray-500 {
+    color: #9ca3af;
+}
+
+.dark .text-gray-400 {
+    color: #6b7280;
+}
+
+/* ===========================================
+   UTILIDADES
+   =========================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Hover effects para botões */
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}

@@ -4,200 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexusTrack - Login/Cadastro</title>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Configuração do tema Tailwind
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#5D5CDE',
-                        'primary-dark': '#4A49B8',
-                        'primary-light': '#7E7DE6',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        custom: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                        'custom-dark': '0 4px 20px rgba(0, 0, 0, 0.3)',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- CSS personalizado -->
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="index.css">
 </head>
-<body class="font-sans antialiased bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 min-h-screen flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
     
-    <!-- Cabeçalho -->
-    <header class="py-4 px-6 sm:px-10">
-        <div class="flex justify-between items-center max-w-6xl mx-auto">
-            <div class="flex items-center">
-                <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white font-bold text-lg animate-pulse-light">
-                    NT
+    <!-- Header com informações do sistema -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold gradient-text">NexusTrack</h1>
+                    <span class="ml-3 text-sm text-gray-600 dark:text-gray-400">Sistema de Autenticação</span>
                 </div>
-                <h1 class="ml-3 text-xl font-bold">NexusTrack</h1>
-            </div>
-        </div>
-    </header>
-
-    <!-- Conteúdo Principal -->
-    <main class="flex-grow flex items-center justify-center p-6">
-        <div class="max-w-5xl w-full mx-auto flex flex-col lg:flex-row rounded-2xl overflow-hidden shadow-custom dark:shadow-custom-dark bg-white dark:bg-gray-800">
-           
-            <!-- Lado Esquerdo - Branding -->
-            <div class="w-full lg:w-1/2 gradient-bg p-8 sm:p-12 flex flex-col justify-center text-white">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-6">Bem-vindo ao NexusTrack</h2>
-                <p class="text-lg mb-8 opacity-90">A plataforma completa para gerenciamento e acompanhamento de envios.</p>
-               
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <span>Gerenciamento de pedidos e envios intuitivo</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <span>Acompanhamento envios em tempo real</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <span>Colaboração em equipe simplificada</span>
-                    </div>
-                </div>
-               
-                <div class="hidden lg:block">
-                    <div class="text-sm opacity-75 mb-2">Já possui uma conta?</div>
-                    <button id="leftToggleBtn" class="py-2 px-6 bg-white text-primary font-medium rounded-lg hover:bg-opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                    <span class="flex items-center">
+                        👥 Usuários: <span id="headerUserCount" class="ml-1 counter-badge">0</span>
+                    </span>
+                    <button id="leftToggleBtn" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                         Alternar para Cadastro
                     </button>
                 </div>
             </div>
-           
-            <!-- Lado Direito - Formulários -->
-            <div class="w-full lg:w-1/2 p-8 sm:p-12 relative perspective">
-                <div id="formContainer" class="form-container relative w-full">
-                    
-                    <!-- Formulário de Login (Frente) -->
-                    <div class="form-side form-front absolute w-full">
-                        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center">Login</h2>
-                       
-                        <form id="loginForm" class="space-y-5">
+        </div>
+    </header>
+
+    <!-- Container principal -->
+    <main class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="perspective w-full max-w-md">
+            <div id="formContainer" class="form-container">
+                
+                <!-- Formulário de Login (Frente) -->
+                <div id="loginFormContainer" class="form-side bg-white dark:bg-gray-800 shadow-2xl">
+                    <div class="px-8 py-10">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold gradient-text mb-2">Bem-vindo!</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Entre na sua conta para continuar</p>
+                        </div>
+
+                        <form id="loginForm" class="space-y-6">
                             <div>
-                                <label for="loginEmail" class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" id="loginEmail" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="seu@email.com" required>
-                                <div id="loginEmailError" class="text-red-500 text-sm mt-1 hidden"></div>
+                                <label for="loginEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="loginEmail" 
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                    placeholder="seu@email.com"
+                                    required
+                                >
+                                <div id="loginEmailError" class="hidden text-red-500 text-sm mt-1"></div>
                             </div>
-                           
+
                             <div>
-                                <label for="loginPassword" class="block text-sm font-medium mb-1">Senha</label>
-                                <input type="password" id="loginPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="••••••••" required>
-                                <div id="loginPasswordError" class="text-red-500 text-sm mt-1 hidden"></div>
+                                <label for="loginPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Senha
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="loginPassword" 
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                    placeholder="Sua senha"
+                                    required
+                                >
+                                <div id="loginPasswordError" class="hidden text-red-500 text-sm mt-1"></div>
                             </div>
-                           
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="remember" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                                    <label for="remember" class="ml-2 block text-sm">Lembrar-me</label>
-                                </div>
-                                <a href="#" class="text-sm text-primary hover:underline">Esqueceu a senha?</a>
-                            </div>
-                           
-                            <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+
+                            <button 
+                                type="submit" 
+                                class="w-full gradient-bg text-white py-3 px-4 rounded-lg hover:opacity-90 transition-all font-medium demo-button"
+                            >
                                 Entrar
                             </button>
-                           
-                            <div class="text-center text-sm">
-                                Não tem uma conta?
-                                <button type="button" id="toRegisterBtn" class="text-primary hover:underline font-medium">Cadastre-se</button>
-                            </div>
                         </form>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Ainda não tem uma conta? 
+                                <button id="toRegisterBtn" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-medium">
+                                    Cadastre-se aqui
+                                </button>
+                            </p>
+                        </div>
                     </div>
-                   
-                    <!-- Formulário de Cadastro (Verso) -->
-                    <div class="form-side form-back absolute w-full">
-                        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center">Cadastro</h2>
-                       
-                        <form id="registerForm" class="space-y-5">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                </div>
+
+                <!-- Formulário de Cadastro (Verso) -->
+                <div id="registerFormContainer" class="form-side form-back bg-white dark:bg-gray-800 shadow-2xl">
+                    <div class="px-8 py-10">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold gradient-text mb-2">Criar Conta</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Preencha os dados para se cadastrar</p>
+                        </div>
+
+                        <form id="registerForm" class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label for="firstName" class="block text-sm font-medium mb-1">Nome</label>
-                                    <input type="text" id="firstName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="Nome" required>
-                                    <div id="firstNameError" class="text-red-500 text-sm mt-1 hidden"></div>
-                                </div>
-                                <div>
-                                    <label for="lastName" class="block text-sm font-medium mb-1">Sobrenome</label>
-                                    <input type="text" id="lastName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="Sobrenome" required>
-                                    <div id="lastNameError" class="text-red-500 text-sm mt-1 hidden"></div>
-                                </div>
-                            </div>
-                           
-                            <div>
-                                <label for="registerEmail" class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" id="registerEmail" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="seu@email.com" required>
-                                <div id="registerEmailError" class="text-red-500 text-sm mt-1 hidden"></div>
-                            </div>
-                           
-                            <div>
-                                <label for="registerPassword" class="block text-sm font-medium mb-1">Senha</label>
-                                <input type="password" id="registerPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="••••••••" required>
-                                <div id="registerPasswordError" class="text-red-500 text-sm mt-1 hidden"></div>
-                            </div>
-                           
-                            <div>
-                                <label for="confirmPassword" class="block text-sm font-medium mb-1">Confirmar Senha</label>
-                                <input type="password" id="confirmPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white text-base" placeholder="••••••••" required>
-                                <div id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden"></div>
-                            </div>
-                           
-                            <div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="terms" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                                    <label for="terms" class="ml-2 block text-sm">
-                                        Concordo com os <a href="#" class="text-primary hover:underline">Termos</a> e <a href="#" class="text-primary hover:underline">Política de Privacidade</a>
+                                    <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Nome
                                     </label>
+                                    <input 
+                                        type="text" 
+                                        id="firstName" 
+                                        class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                        placeholder="Seu nome"
+                                        required
+                                    >
+                                    <div id="firstNameError" class="hidden text-red-500 text-sm mt-1"></div>
                                 </div>
-                                <div id="termsError" class="text-red-500 text-sm mt-1 hidden"></div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Sobrenome
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="lastName" 
+                                        class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                        placeholder="Sobrenome"
+                                        required
+                                    >
+                                    <div id="lastNameError" class="hidden text-red-500 text-sm mt-1"></div>
+                                </div>
                             </div>
-                           
-                            <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
-                                Cadastrar
+
+                            <div>
+                                <label for="registerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="registerEmail" 
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                    placeholder="seu@email.com"
+                                    required
+                                >
+                                <div id="registerEmailError" class="hidden text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <div>
+                                <label for="registerPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Senha
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="registerPassword" 
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                    placeholder="Mínimo 6 caracteres"
+                                    required
+                                >
+                                <div id="registerPasswordError" class="hidden text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <div>
+                                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Confirmar Senha
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                                    placeholder="Confirme sua senha"
+                                    required
+                                >
+                                <div id="confirmPasswordError" class="hidden text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <div>
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        id="terms" 
+                                        class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600 rounded"
+                                        required
+                                    >
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                                        Concordo com os 
+                                        <a href="#" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">Termos de Uso</a> 
+                                        e 
+                                        <a href="#" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">Política de Privacidade</a>
+                                    </span>
+                                </label>
+                                <div id="termsError" class="hidden text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                class="w-full gradient-bg text-white py-3 px-4 rounded-lg hover:opacity-90 transition-all font-medium demo-button"
+                            >
+                                Criar Conta
                             </button>
-                           
-                            <div class="text-center text-sm">
-                                Já tem uma conta?
-                                <button type="button" id="toLoginBtn" class="text-primary hover:underline font-medium">Faça login</button>
-                            </div>
                         </form>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Já tem uma conta? 
+                                <button id="toLoginBtn" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-medium">
+                                    Faça login aqui
+                                </button>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="py-6 px-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>&copy; 2025 NexusTrack. Todos os direitos reservados.</p>
-    </footer>
-
-    <!-- JavaScript -->
-    <script src="login.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

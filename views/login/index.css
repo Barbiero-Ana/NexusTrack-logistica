@@ -1,58 +1,27 @@
-/*
-===========================================
-ESTILOS CSS PERSONALIZADOS - NEXUSTRACK
-===========================================
-
-Arquivo: login.css
-Descrição: Estilos personalizados para a tela de login/cadastro
-Autor: Equipe NexusTrack
-Data: 2025
-
-Índice:
-1. Importações e fontes
-2. Utilitários globais
-3. Efeito de flip do formulário
-4. Gradientes personalizados
-5. Animações
-6. Responsividade
-*/
+/**
+ * ===========================================
+ * ESTILOS CUSTOMIZADOS PARA LOGIN/CADASTRO
+ * ===========================================
+ * 
+ * Arquivo: styles.css
+ * Descrição: Estilos para animações, efeitos e tema
+ * Autor: Equipe NexusTrack
+ * Data: 2025
+ * Versão: 2.0
+ */
 
 /* ===========================================
-   1. IMPORTAÇÕES E FONTES
+   1. EFEITOS DE PERSPECTIVA E FLIP
    =========================================== */
-
-/* Importação da fonte Inter do Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* ===========================================
-   2. UTILITÁRIOS GLOBAIS
-   =========================================== */
-
-/* Transição suave para todos os elementos que usam esta classe */
-.custom-transition {
-    transition: all 0.3s ease;
-}
-
-/* ===========================================
-   3. EFEITO DE FLIP DO FORMULÁRIO
-   =========================================== */
-
-/*
-Estas classes controlam o efeito 3D de virar o card
-entre formulário de login e cadastro
-*/
 
 .perspective {
-    perspective: 1000px; /* Ajuste da perspectiva para melhor efeito 3D */
-    min-height: 620px; /* Altura mínima para acomodar os formulários */
+    perspective: 1000px;
 }
 
 .form-container {
-    transform-style: preserve-3d; /* Preserva o estilo 3D para elementos filhos */
-    transform: rotateY(0deg);
-    transition: transform 0.6s ease;
     position: relative;
-    min-height: 600px; /* Altura mínima para garantir que todo o conteúdo seja visível */
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
 }
 
 .form-container.flipped {
@@ -60,127 +29,211 @@ entre formulário de login e cadastro
 }
 
 .form-side {
+    position: relative;
     backface-visibility: hidden;
-    transition: transform 0.6s ease;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-}
-
-.form-front {
-    z-index: 2; /* Garante que o formulário de login fique visível inicialmente */
-    transform: rotateY(0deg);
+    border-radius: 12px;
 }
 
 .form-back {
     transform: rotateY(180deg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 /* ===========================================
-   4. GRADIENTES PERSONALIZADOS
+   2. GRADIENTES E CORES
    =========================================== */
-
-/*
-Definição do gradiente da área lateral e botões
-Diferentes variações para modo claro e escuro
-*/
 
 .gradient-bg {
-    background: linear-gradient(135deg, #5D5CDE 0%, #7E7DE6 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.dark .gradient-bg {
-    background: linear-gradient(135deg, #4A49B8 0%, #5D5CDE 100%);
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* ===========================================
-   5. ANIMAÇÕES
-   =========================================== */
-
-/*
-Efeito suave de pulso para o logotipo
-Diferentes variações para modo claro e escuro
-*/
-
-@keyframes pulse-light {
-    0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); 
-    }
-    50% { 
-        box-shadow: 0 0 0 8px rgba(93, 92, 222, 0); 
-    }
-}
-
-@keyframes pulse-dark {
-    0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(126, 125, 230, 0.4); 
-    }
-    50% { 
-        box-shadow: 0 0 0 8px rgba(126, 125, 230, 0); 
-    }
-}
-
-.animate-pulse-light {
-    animation: pulse-light 2s infinite;
-}
-
-.dark .animate-pulse-light {
-    animation: pulse-dark 2s infinite;
+.counter-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: bold;
 }
 
 /* ===========================================
-   6. RESPONSIVIDADE
+   3. ANIMAÇÕES
    =========================================== */
 
-/* Ajustes para dispositivos móveis */
+.animate-pulse-demo {
+    animation: pulse-demo 2s infinite;
+}
+
+@keyframes pulse-demo {
+    0%, 100% { 
+        opacity: 1; 
+    }
+    50% { 
+        opacity: 0.7; 
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================================
+   4. COMPONENTES INTERATIVOS
+   =========================================== */
+
+.demo-button {
+    transition: all 0.2s ease;
+}
+
+.demo-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-card {
+    transition: all 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================================
+   5. SCROLLBAR CUSTOMIZADA
+   =========================================== */
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* ===========================================
+   6. SUPORTE PARA MODO ESCURO
+   =========================================== */
+
+.dark .custom-scrollbar {
+    scrollbar-color: #4a5568 #2d3748;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: #2d3748;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a5568;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+}
+
+/* ===========================================
+   7. RESPONSIVIDADE
+   =========================================== */
+
 @media (max-width: 640px) {
-    .perspective, 
-    .form-container {
-        min-height: 680px; /* Maior altura para dispositivos móveis */
+    .perspective {
+        padding: 0 1rem;
     }
-}
-
-/* Ajustes para tablets */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .perspective, 
-    .form-container {
-        min-height: 640px;
+    
+    .form-side {
+        margin: 0.5rem 0;
+    }
+    
+    .demo-button:hover {
+        transform: none;
+    }
+    
+    .user-card:hover {
+        transform: none;
     }
 }
 
 /* ===========================================
-   7. ESTADOS DE FOCO E HOVER
+   8. ESTADOS DE FOCO E ACESSIBILIDADE
    =========================================== */
 
-/* Melhoria dos estados de foco para acessibilidade */
-.form-side input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.1);
+.demo-button:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
 }
 
-.form-side button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.2);
+input:focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* Estados hover para melhor feedback visual */
-.form-side input:hover {
-    border-color: #7E7DE6;
+/* Melhora a visibilidade no modo de alto contraste */
+@media (prefers-contrast: high) {
+    .gradient-bg {
+        background: #4c51bf;
+    }
+    
+    .gradient-text {
+        background: #4c51bf;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 }
 
-/* ===========================================
-   8. MODO ESCURO - AJUSTES ESPECÍFICOS
-   =========================================== */
-
-.dark .form-side input:focus {
-    box-shadow: 0 0 0 3px rgba(126, 125, 230, 0.1);
-}
-
-.dark .form-side button:focus {
-    box-shadow: 0 0 0 3px rgba(126, 125, 230, 0.2);
-}
-
-.dark .form-side input:hover {
-    border-color: #7E7DE6;
+/* Respeita as preferências de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    .form-container {
+        transition: none;
+    }
+    
+    .animate-pulse-demo {
+        animation: none;
+    }
+    
+    .fade-in-up {
+        animation: none;
+    }
+    
+    .demo-button {
+        transition: none;
+    }
+    
+    .user-card {
+        transition: none;
+    }
 }
