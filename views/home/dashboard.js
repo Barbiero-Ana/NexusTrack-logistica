@@ -120,7 +120,7 @@ function createDemoUsers() {
     ];
 }
 
-/**
+/*
  * Dados fake de envios para demonstração
  */
 const FAKE_SHIPMENTS = [
