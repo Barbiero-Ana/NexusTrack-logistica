@@ -424,39 +424,50 @@ class AuthManager {
     }
 
     /**
-     * Executa ações após login bem-sucedido
-     * @param {Object} user - Dados do usuário logado
-     */
-    onLoginSuccess(user) {
-        // Atualiza último login
-        user.lastLogin = new Date().toISOString();
-        
-        const roleText = {
-            'admin': '👑 Administrador',
-            'manager': '👔 Gerente',
-            'user': '👤 Usuário'
-        };
-        
-        alert(`Login bem-sucedido! 🎉\n\nBem-vindo(a), ${user.firstName}!\nID: ${user.id}\nPerfil: ${roleText[user.role] || user.role}`);
-        this.loginForm.reset();
-        
-        console.log("✅ Usuário logado (simulação):", {
-            id: user.id,
-            nome: `${user.firstName} ${user.lastName}`,
-            email: user.email,
-            role: user.role,
-            lastLogin: user.lastLogin
-        });
-        
-        // Atualiza painel se estiver aberto
-        const demoManager = window.demoManagerInstance;
-        if (demoManager) {
-            demoManager.updateUserCount();
-        }
-        
-        // Redireciona para o dashboard
-        window.location.href = 'home/dashboard.html';
+ * Executa ações após login bem-sucedido
+ * @param {Object} user - Dados do usuário logado
+ */
+onLoginSuccess(user) {
+    // Atualiza último login
+    user.lastLogin = new Date().toISOString();
+    
+    // Salva os dados do usuário no localStorage
+    localStorage.setItem('loggedInUser', JSON.stringify({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin,
+        isActive: user.isActive
+    }));
+    
+    const roleText = {
+        'admin': '👑 Administrador',
+        'manager': '👔 Gerente',
+        'user': '👤 Usuário'
+    };
+    
+    alert(`Login bem-sucedido! 🎉\n\nBem-vindo(a), ${user.firstName}!\nID: ${user.id}\nPerfil: ${roleText[user.role] || user.role}`);
+    this.loginForm.reset();
+    
+    console.log("✅ Usuário logado (simulação):", {
+        id: user.id,
+        nome: `${user.firstName} ${user.lastName}`,
+        email: user.email,
+        role: user.role,
+        lastLogin: user.lastLogin
+    });
+    
+    // Atualiza painel se estiver aberto
+    const demoManager = window.demoManagerInstance;
+    if (demoManager) {
+        demoManager.updateUserCount();
     }
+    
+    window.location.href = '/views/home/dashboard.html';
+}
 
     /**
      * Processa o cadastro do usuário

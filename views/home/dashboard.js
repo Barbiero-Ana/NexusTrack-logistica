@@ -31,18 +31,29 @@ let isAdmin = false;
  */
 function checkAuthenticatedUser() {
     const loggedUser = localStorage.getItem('loggedInUser');
-    
+
+    console.log('Dados do loggedInUser:', loggedUser);
+
     if (loggedUser) {
         try {
             currentUser = JSON.parse(loggedUser);
+            
+            // Valida se o objeto contém as propriedades necessárias
+            if (!currentUser || !currentUser.id || !currentUser.firstName || !currentUser.lastName || !currentUser.role) {
+                throw new Error('Dados do usuário inválidos ou incompletos');
+            }
+
             isAdmin = currentUser.role === 'admin';
             updateUserInterface();
             loadShipments();
         } catch (error) {
-            console.error('Erro ao carregar dados do usuário:', error);
+            console.error('Erro ao carregar dados do usuário:', error.message);
+            showAlert('Erro ao carregar dados do usuário. Redirecionando para login...', 'error');
             redirectToLogin();
         }
     } else {
+        console.log('Nenhum usuário logado encontrado no localStorage');
+        showAlert('Você precisa fazer login para acessar esta página.', 'warning');
         redirectToLogin();
     }
 }
@@ -99,7 +110,8 @@ function updateUserInterface() {
 function redirectToLogin() {
     showAlert('Você precisa fazer login para acessar esta página.', 'warning');
     setTimeout(() => {
-        window.location.href = 'index.html';
+        window.alert('Função redirectToLogin() chamada!');
+        window.location.href = '../login/index.html';
     }, 2000);
 }
 
@@ -791,7 +803,9 @@ class SidebarManager {
             localStorage.removeItem('loggedInUser');
             showAlert('Logout realizado com sucesso!', 'success', 2000);
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.alert('Função logout() chamada!');
+                window.location.href = '../login/index.html';
+
             }, 2000);
         }
     }
