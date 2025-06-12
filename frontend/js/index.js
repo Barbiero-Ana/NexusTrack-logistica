@@ -466,7 +466,7 @@ onLoginSuccess(user) {
         demoManager.updateUserCount();
     }
     
-    window.location.href = '/views/home/dashboard.html';
+    window.location.href = '/frontend/dashboard.html';
 }
 
     /**
