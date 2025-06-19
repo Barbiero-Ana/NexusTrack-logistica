@@ -342,47 +342,79 @@ class AuthManager {
         this.validator = validationManager;
         this.loginForm = document.getElementById('loginForm');
         this.registerForm = document.getElementById('registerForm');
-        
+        this.apiUrl = "http://localhost:5000/api";
+
         this.initEventListeners();
     }
 
-    /**
-     * Inicializa os event listeners dos formulários
-     */
     initEventListeners() {
         this.loginForm?.addEventListener('submit', (e) => this.handleLogin(e));
         this.registerForm?.addEventListener('submit', (e) => this.handleRegister(e));
     }
 
-    /**
-     * Processa o login do usuário
-     * @param {Event} e - Evento de submit do formulário
-     */
-    handleLogin(e) {
+    async handleLogin(e) {
         e.preventDefault();
-        
+
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
-        
-        // Limpa erros anteriores
+
         this.validator.clearError('loginEmail');
         this.validator.clearError('loginPassword');
-        
-        // Validações
-        if (!this.validateLoginFields(email, password)) {
-            return;
-        }
 
-        // Verificação de usuário e senha
-        this.authenticateUser(email, password);
+        if (!this.validateLoginFields(email, password)) return;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, senha: password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("loggedInUser", JSON.stringify(data));
+                window.location.href = "/frontend/dashboard.html";
+            } else {
+                this.validator.showError('loginEmail', data.erro || "Erro ao fazer login");
+            }
+        } catch (err) {
+            this.validator.showError('loginEmail', "Erro na comunicação com o servidor");
+        }
     }
 
-    /**
-     * Valida os campos do formulário de login
-     * @param {string} email - Email do usuário
-     * @param {string} password - Senha do usuário
-     * @returns {boolean} - True se todos os campos são válidos
-     */
+    async handleRegister(e) {
+        e.preventDefault();
+        const data = this.getRegisterFormData();
+        this.clearRegisterErrors();
+
+        if (!this.validateRegisterFields(data)) return;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/registrar`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nome: data.firstName,
+                    sobrenome: data.lastName,
+                    email: data.email,
+                    senha: data.password
+                })
+            });
+
+            const resData = await response.json();
+
+            if (response.ok) {
+                alert("Cadastro realizado com sucesso!");
+                window.location.href = "index.html";
+            } else {
+                this.validator.showError('registerEmail', resData.erro || "Erro no cadastro");
+            }
+        } catch (err) {
+            this.validator.showError('registerEmail', "Erro na comunicação com o servidor");
+        }
+    }
+
     validateLoginFields(email, password) {
         let isValid = true;
 
@@ -399,101 +431,6 @@ class AuthManager {
         return isValid;
     }
 
-    /**
-     * Autentica o usuário no sistema simulado
-     * @param {string} email - Email do usuário
-     * @param {string} password - Senha do usuário
-     */
-    authenticateUser(email, password) {
-        const foundUser = users.find(user => user.email === email);
-        
-        if (foundUser) {
-            if (!foundUser.isActive) {
-                this.validator.showError('loginEmail', 'Conta desativada. Contate o administrador.');
-                return;
-            }
-            
-            if (foundUser.password === password) {
-                this.onLoginSuccess(foundUser);
-            } else {
-                this.validator.showError('loginPassword', 'Senha incorreta.');
-            }
-        } else {
-            this.validator.showError('loginEmail', 'Email não cadastrado.');
-        }
-    }
-
-    /**
- * Executa ações após login bem-sucedido
- * @param {Object} user - Dados do usuário logado
- */
-onLoginSuccess(user) {
-    // Atualiza último login
-    user.lastLogin = new Date().toISOString();
-    
-    // Salva os dados do usuário no localStorage
-    localStorage.setItem('loggedInUser', JSON.stringify({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        createdAt: user.createdAt,
-        lastLogin: user.lastLogin,
-        isActive: user.isActive
-    }));
-    
-    const roleText = {
-        'admin': '👑 Administrador',
-        'manager': '👔 Gerente',
-        'user': '👤 Usuário'
-    };
-    
-    alert(`Login bem-sucedido! 🎉\n\nBem-vindo(a), ${user.firstName}!\nID: ${user.id}\nPerfil: ${roleText[user.role] || user.role}`);
-    this.loginForm.reset();
-    
-    console.log("✅ Usuário logado (simulação):", {
-        id: user.id,
-        nome: `${user.firstName} ${user.lastName}`,
-        email: user.email,
-        role: user.role,
-        lastLogin: user.lastLogin
-    });
-    
-    // Atualiza painel se estiver aberto
-    const demoManager = window.demoManagerInstance;
-    if (demoManager) {
-        demoManager.updateUserCount();
-    }
-    
-    window.location.href = '/frontend/dashboard.html';
-}
-
-    /**
-     * Processa o cadastro do usuário
-     * @param {Event} e - Evento de submit do formulário
-     */
-    handleRegister(e) {
-        e.preventDefault();
-        
-        const formData = this.getRegisterFormData();
-        
-        // Limpa erros anteriores
-        this.clearRegisterErrors();
-        
-        // Validações
-        if (!this.validateRegisterFields(formData)) {
-            return;
-        }
-
-        // Registro do usuário
-        this.registerUser(formData);
-    }
-
-    /**
-     * Coleta dados do formulário de cadastro
-     * @returns {Object} - Dados do formulário
-     */
     getRegisterFormData() {
         return {
             firstName: document.getElementById('firstName').value.trim(),
@@ -505,116 +442,35 @@ onLoginSuccess(user) {
         };
     }
 
-    /**
-     * Limpa todos os erros do formulário de cadastro
-     */
     clearRegisterErrors() {
         const fields = ['firstName', 'lastName', 'registerEmail', 'registerPassword', 'confirmPassword', 'terms'];
         fields.forEach(field => this.validator.clearError(field));
     }
 
-    /**
-     * Valida todos os campos do formulário de cadastro
-     * @param {Object} data - Dados do formulário
-     * @returns {boolean} - True se todos os campos são válidos
-     */
     validateRegisterFields(data) {
         let isValid = true;
 
-        // Validação do nome
-        if (!data.firstName) {
-            isValid = this.validator.showError('firstName', 'Nome é obrigatório');
-        }
-
-        // Validação do sobrenome
-        if (!data.lastName) {
-            isValid = this.validator.showError('lastName', 'Sobrenome é obrigatório');
-        }
-
-        // Validação do email
+        if (!data.firstName) isValid = this.validator.showError('firstName', 'Nome é obrigatório');
+        if (!data.lastName) isValid = this.validator.showError('lastName', 'Sobrenome é obrigatório');
         if (!data.email) {
             isValid = this.validator.showError('registerEmail', 'Email é obrigatório');
         } else if (!this.validator.isValidEmail(data.email)) {
             isValid = this.validator.showError('registerEmail', 'Email inválido');
-        } else if (this.emailExists(data.email)) {
-            isValid = this.validator.showError('registerEmail', 'Este email já está cadastrado.');
         }
-
-        // Validação da senha
-        if (!data.password) {
-            isValid = this.validator.showError('registerPassword', 'Senha é obrigatória');
-        } else if (data.password.length < 6) {
+        if (!data.password || data.password.length < 6) {
             isValid = this.validator.showError('registerPassword', 'Senha deve ter pelo menos 6 caracteres');
         }
-
-        // Validação da confirmação de senha
-        if (!data.confirmPassword) {
-            isValid = this.validator.showError('confirmPassword', 'Confirme sua senha');
-        } else if (data.confirmPassword !== data.password) {
+        if (!data.confirmPassword || data.confirmPassword !== data.password) {
             isValid = this.validator.showError('confirmPassword', 'As senhas não coincidem');
         }
-
-        // Validação dos termos
         if (!data.terms) {
-            isValid = this.validator.showError('terms', 'Você deve concordar com os Termos e Política de Privacidade.');
+            isValid = this.validator.showError('terms', 'Você deve aceitar os termos.');
         }
 
         return isValid;
     }
-
-    /**
-     * Verifica se um email já existe no sistema
-     * @param {string} email - Email a ser verificado
-     * @returns {boolean} - True se o email já existe
-     */
-    emailExists(email) {
-        return users.some(user => user.email === email);
-    }
-
-    /**
-     * Registra um novo usuário no sistema simulado
-     * @param {Object} data - Dados do usuário a ser registrado
-     */
-    registerUser(data) {
-        const newUser = {
-            id: generateNextId(),
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            password: data.password, // Em produção, seria hasheada no backend
-            role: 'user',
-            createdAt: new Date().toISOString(),
-            lastLogin: null,
-            isActive: true
-        };
-
-        users.push(newUser);
-        
-        console.log('✅ Usuário cadastrado (simulação):', {
-            id: newUser.id,
-            nome: `${newUser.firstName} ${newUser.lastName}`,
-            email: newUser.email,
-            createdAt: newUser.createdAt
-        });
-        
-        this.onRegisterSuccess(newUser);
-    }
-
-    /**
-     * Executa ações após cadastro bem-sucedido
-     */
-    onRegisterSuccess(user) {
-        alert(`Cadastro bem-sucedido! 🎉\n\nID: ${user.id}\nNome: ${user.firstName} ${user.lastName}\n\nRedirecionando para o dashboard...`);
-        this.registerForm.reset();
-        this.validator.clearError('terms');
-        
-        // Atualiza contadores
-        updateUserCounters();
-        
-        // Redireciona para o dashboard
-        window.location.href = 'home/dashboard.html';
-    }
 }
+
 
 // ===========================================
 // 6. PAINEL DE DEMONSTRAÇÃO
